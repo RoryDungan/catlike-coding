@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class LightingShaderGUI : ShaderGUI
 {
+    enum SmoothnessSource
+    {
+        Uniform, Albedo, Metallic
+    }
+
     Material target;
     MaterialEditor editor;
     MaterialProperty[] properties;

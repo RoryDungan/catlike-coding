@@ -51,6 +51,14 @@ float GetMetallic(Interpolators i) {
     #endif
 }
 
+float GetSmoothness(Interpolators i) {
+    #if defined(_METALLIC_MAP)
+        return tex2D(_MetallicMap, i.uv.xy).a * _Smoothness;
+    #else 
+        return _Smoothness;
+    #endif
+}
+
 void ComputeVertexLightColor(inout Interpolators i) {
 #if defined(VERTEXLIGHT_ON)
     i.vertexLightColor = Shade4PointLights(
@@ -122,7 +130,7 @@ UnityIndirect CreateIndirectLight (Interpolators i, float3 viewDir) {
         indirectLight.diffuse += max(0, ShadeSH9(float4(i.normal, 1)));
         float3 reflectionDir = reflect(-viewDir, i.normal);
         Unity_GlossyEnvironmentData envData;
-        envData.roughness = 1 - _Smoothness;
+        envData.roughness = 1 - GetSmoothness(i);
         envData.reflUVW = BoxProjection(
             reflectionDir,
             i.worldPos,
@@ -219,7 +227,7 @@ fixed4 frag (Interpolators i) : SV_TARGET
 
     return UNITY_BRDF_PBS(
         albedo, specularTint,
-        oneMinusReflectivity, _Smoothness,
+        oneMinusReflectivity, GetSmoothness(i),
         i.normal, viewDir,
         CreateLight(i), CreateIndirectLight(i, viewDir)
     );

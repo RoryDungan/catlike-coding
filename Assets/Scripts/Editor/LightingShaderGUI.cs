@@ -14,6 +14,9 @@ public class LightingShaderGUI : ShaderGUI
 
     static GUIContent staticLabel = new GUIContent();
 
+    static ColorPickerHDRConfig emissionConfig = 
+        new ColorPickerHDRConfig(0f, 99f, 1f / 99f, 3f);
+
     static GUIContent MakeLabel(string text, string tooltip = null)
     {
         staticLabel.text = text;
@@ -77,6 +80,7 @@ public class LightingShaderGUI : ShaderGUI
         DoMetallic();
         DoSmoothness();
         DoNormals();
+        DoEmission();
         editor.TextureScaleOffsetProperty(mainTex);
     }
 
@@ -156,5 +160,22 @@ public class LightingShaderGUI : ShaderGUI
             map,
             map.textureValue ? FindProperty("_DetailBumpScale") : null
         );
+    }
+
+    void DoEmission()
+    {
+        var map = FindProperty("_EmissionMap");
+        EditorGUI.BeginChangeCheck();
+        editor.TexturePropertyWithHDRColor(
+            MakeLabel(map, "Emission (RGB)"), 
+            map, 
+            FindProperty("_Emission"),
+            emissionConfig,
+            false
+        );
+        if (EditorGUI.EndChangeCheck()) 
+        {
+            SetKeyword("_EMISSION_MAP", map.textureValue);
+        }
     }
 }

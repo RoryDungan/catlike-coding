@@ -15,6 +15,9 @@ float _Smoothness;
 sampler2D _NormalMap, _DetailNormalMap;
 float _BumpScale, _DetailBumpScale;
 
+sampler2D _EmissionMap;
+float3 _Emission;
+
 struct VertexData
 {
     float4 vertex : POSITION;
@@ -59,6 +62,18 @@ float GetSmoothness(Interpolators i) {
         smoothness = tex2D(_MetallicMap, i.uv.xy).a;
     #endif
     return smoothness * _Smoothness;
+}
+
+float3 GetEmission (Interpolators i) {
+    #if defined(FORWARD_BASE_PASS)
+        #if defined(_EMISSION_MAP)
+            return tex2D(_EmissionMap, i.uv.xy) * _Emission;
+        #else 
+            return _Emission;
+        #endif
+    #else 
+        return 0;
+    #endif
 }
 
 void ComputeVertexLightColor(inout Interpolators i) {
@@ -227,12 +242,14 @@ fixed4 frag (Interpolators i) : SV_TARGET
         albedo, GetMetallic(i), specularTint, oneMinusReflectivity
     );
 
-    return UNITY_BRDF_PBS(
+    float4 colour = UNITY_BRDF_PBS(
         albedo, specularTint,
         oneMinusReflectivity, GetSmoothness(i),
         i.normal, viewDir,
         CreateLight(i), CreateIndirectLight(i, viewDir)
     );
+    colour.rgb += GetEmission(i);
+    return colour;
 }
 
 #endif

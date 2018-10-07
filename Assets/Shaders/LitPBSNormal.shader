@@ -17,6 +17,9 @@ Shader "Custom/Lit (PBS, normal map)"
         _DetailTex ("Detial Albedo", 2D) = "gray" {}
         [NoScaleOffset] _DetailNormalMap ("Detail Normals", 2D) = "bump" {}
         _DetailBumpScale ("Detail Bump Scale", Float) = 1
+
+        [NoScaleOffset] _EmissionMap ("Emission", 2D) = "black" {}
+        _Emission ("Emission", Color) = (0, 0, 0)
     }
     SubShader
     {
@@ -33,6 +36,7 @@ Shader "Custom/Lit (PBS, normal map)"
             #pragma multi_compile _ VERTEXLIGHT_ON
             #pragma shader_feature _ _METALLIC_MAP
             #pragma shader_feature _ _SMOOTHNESS_ALBEDO _SMOOTHNESS_METALLIC
+            #pragma shader_feature _ _EMISSION_MAP
 
             #pragma vertex vert
             #pragma fragment frag
@@ -58,6 +62,7 @@ Shader "Custom/Lit (PBS, normal map)"
             #pragma multi_compile_fwdadd_fullshadows
             #pragma shader_feature _ _METALLIC_MAP
             #pragma shader_feature _ _SMOOTHNESS_ALBEDO _SMOOTHNESS_METALLIC
+            #pragma shader_feature _ _EMISSION_MAP
 
             #pragma vertex vert
             #pragma fragment frag

@@ -20,6 +20,9 @@ Shader "Custom/Lit (PBS, normal map)"
 
         [NoScaleOffset] _EmissionMap ("Emission", 2D) = "black" {}
         _Emission ("Emission", Color) = (0, 0, 0)
+
+        [NoScaleOffset] _OcclusionMap("Occlusion", 2D) = "white" {}
+        _OcclusionStrength ("Occlusion Strength", Range(0, 1)) = 1
     }
     SubShader
     {
@@ -36,6 +39,7 @@ Shader "Custom/Lit (PBS, normal map)"
             #pragma multi_compile _ VERTEXLIGHT_ON
             #pragma shader_feature _ _METALLIC_MAP
             #pragma shader_feature _ _SMOOTHNESS_ALBEDO _SMOOTHNESS_METALLIC
+            #pragma shader_feature _ _OCCLUSION_MAP
             #pragma shader_feature _ _EMISSION_MAP
 
             #pragma vertex vert
@@ -62,6 +66,7 @@ Shader "Custom/Lit (PBS, normal map)"
             #pragma multi_compile_fwdadd_fullshadows
             #pragma shader_feature _ _METALLIC_MAP
             #pragma shader_feature _ _SMOOTHNESS_ALBEDO _SMOOTHNESS_METALLIC
+            #pragma shader_feature _ _OCCLUSION_MAP
             #pragma shader_feature _ _EMISSION_MAP
 
             #pragma vertex vert

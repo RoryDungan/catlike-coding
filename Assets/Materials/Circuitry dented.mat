@@ -6,9 +6,9 @@ Material:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Lava
+  m_Name: Circuitry dented
   m_Shader: {fileID: 4800000, guid: 0139ff1df64484d7a9de6c52e5e90dad, type: 3}
-  m_ShaderKeywords: _EMISSION_MAP _SMOOTHNESS_ALBEDO
+  m_ShaderKeywords: _EMISSION_MAP _METALLIC_MAP _OCCLUSION_MAP _SMOOTHNESS_METALLIC
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -39,11 +39,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
-        m_Texture: {fileID: 2800000, guid: 617a2dac9d7094fc684f1e8ac88f0dc9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7010f67f7bf7a454593405a6c88860d8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: cb4574787f0cf44ee820611627a59b55, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0519b315cdedeb94aac2b23e6cc82626, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -51,15 +51,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: f12f59d40acf79f48be05a973b2fbedf, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: 24b01fa640947432b8e9913e476f8844, type: 3}
+        m_Texture: {fileID: 2800000, guid: e5bbafcd54fd43a479290f09e3958621, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 0e17445cc2064474d98d6a53385548e2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
@@ -79,7 +79,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Smoothness: 1
+    - _Smoothness: 0.562
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

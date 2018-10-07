@@ -15,6 +15,9 @@ float _Smoothness;
 sampler2D _NormalMap, _DetailNormalMap;
 float _BumpScale, _DetailBumpScale;
 
+sampler2D _OcclusionMap;
+float _OcclusionStrength;
+
 sampler2D _EmissionMap;
 float3 _Emission;
 
@@ -73,6 +76,14 @@ float3 GetEmission (Interpolators i) {
         #endif
     #else 
         return 0;
+    #endif
+}
+
+float GetOcclusion(Interpolators i) {
+    #if defined(_OCCLUSION_MAP)
+        return lerp(1, tex2D(_OcclusionMap, i.uv.xy).g, _OcclusionStrength);
+    #else
+        return 1;
     #endif
 }
 
@@ -186,6 +197,9 @@ UnityIndirect CreateIndirectLight (Interpolators i, float3 viewDir) {
             indirectLight.specular = probe0;
         #endif
 
+        float occlusion = GetOcclusion(i);
+        indirectLight.diffuse *= occlusion;
+        indirectLight.specular *= occlusion;
     #endif
 
     return indirectLight;
@@ -201,7 +215,6 @@ UnityLight CreateLight (Interpolators i) {
     #endif
 
     UNITY_LIGHT_ATTENUATION(attenuation, i, i.worldPos);
-
     light.color = _LightColor0.rgb * attenuation;
     light.ndotl = DotClamped(i.normal, light.dir);
     return light;

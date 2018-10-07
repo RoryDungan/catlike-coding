@@ -6,7 +6,7 @@
 #include "UnityLightingCommon.cginc"
 
 float4 _Tint;
-sampler2D _MainTex, _DetailTex;
+sampler2D _MainTex, _DetailTex, _DetailMask;
 float4 _MainTex_ST, _DetailTex_ST;
 sampler2D _MetallicMap;
 float _Metallic;
@@ -85,6 +85,20 @@ float GetOcclusion(Interpolators i) {
     #else
         return 1;
     #endif
+}
+
+float GetDetailMask(Interpolators i) {
+    #if defined (_DETAIL_MASK)
+        return tex2D(_DetailMask, i.uv.xy).a;
+    #else 
+        return 1;
+    #endif
+}
+
+float3 GetAlbedo(Interpolators i) {
+    float3 albedo = tex2D(_MainTex, i.uv.xy).rgb * _Tint.rgb;
+    float3 detail = tex2D(_DetailTex, i.uv.zw) * unity_ColorSpaceDouble;
+    return lerp(albedo, albedo * detail, GetDetailMask(i));
 }
 
 void ComputeVertexLightColor(inout Interpolators i) {
@@ -225,6 +239,7 @@ void InitializeFragmentNormal(inout Interpolators i) {
         UnpackScaleNormal(tex2D(_NormalMap, i.uv.xy), _BumpScale);
     float3 detailNormal =
         UnpackScaleNormal(tex2D(_DetailNormalMap, i.uv.zw), _DetailBumpScale);
+    detailNormal = lerp(float3(0, 0, 1), detailNormal, GetDetailMask(i));
     float3 tangentSpaceNormal = BlendNormals(mainNormal, detailNormal);
 
     #if defined(BINORMAL_PER_FRAGMENT)
@@ -246,13 +261,10 @@ fixed4 frag (Interpolators i) : SV_TARGET
 
     float3 viewDir = normalize(_WorldSpaceCameraPos - i.worldPos);
 
-    float3 albedo = tex2D(_MainTex, i.uv.xy).rgb * _Tint.rgb;
-    albedo *= tex2D(_DetailTex, i.uv.zw) * unity_ColorSpaceDouble;
-
-    float3 specularTint = albedo * _Metallic;
-    float oneMinusReflectivity = 1 - _Metallic;
-    albedo = DiffuseAndSpecularFromMetallic(
-        albedo, GetMetallic(i), specularTint, oneMinusReflectivity
+    float3 specularTint;
+    float oneMinusReflectivity;
+    float3 albedo = DiffuseAndSpecularFromMetallic(
+        GetAlbedo(i), GetMetallic(i), specularTint, oneMinusReflectivity
     );
 
     float4 colour = UNITY_BRDF_PBS(

@@ -14,15 +14,16 @@ Shader "Custom/Lit (PBS, normal map)"
         [Gamma] _Metallic ("Metallic", Range(0, 1)) = 0
         _Smoothness ("Smoothness", Range(0, 1)) = 0.5
 
-        _DetailTex ("Detial Albedo", 2D) = "gray" {}
-        [NoScaleOffset] _DetailNormalMap ("Detail Normals", 2D) = "bump" {}
-        _DetailBumpScale ("Detail Bump Scale", Float) = 1
-
         [NoScaleOffset] _EmissionMap ("Emission", 2D) = "black" {}
         _Emission ("Emission", Color) = (0, 0, 0)
 
         [NoScaleOffset] _OcclusionMap("Occlusion", 2D) = "white" {}
         _OcclusionStrength ("Occlusion Strength", Range(0, 1)) = 1
+
+        _DetailTex ("Detial Albedo", 2D) = "gray" {}
+        [NoScaleOffset] _DetailNormalMap ("Detail Normals", 2D) = "bump" {}
+        _DetailBumpScale ("Detail Bump Scale", Float) = 1
+        [NoScaleOffset] _DetailMask("Detail Mask", 2D) = "white" {}
     }
     SubShader
     {
@@ -41,6 +42,7 @@ Shader "Custom/Lit (PBS, normal map)"
             #pragma shader_feature _ _SMOOTHNESS_ALBEDO _SMOOTHNESS_METALLIC
             #pragma shader_feature _ _OCCLUSION_MAP
             #pragma shader_feature _ _EMISSION_MAP
+            #pragma shader_feature _ _DETAIL_MASK
 
             #pragma vertex vert
             #pragma fragment frag
@@ -68,6 +70,7 @@ Shader "Custom/Lit (PBS, normal map)"
             #pragma shader_feature _ _SMOOTHNESS_ALBEDO _SMOOTHNESS_METALLIC
             #pragma shader_feature _ _OCCLUSION_MAP
             #pragma shader_feature _ _EMISSION_MAP
+            #pragma shader_feature _ _DETAIL_MASK
 
             #pragma vertex vert
             #pragma fragment frag

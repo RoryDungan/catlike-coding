@@ -79,6 +79,7 @@ public class LightingShaderGUI : ShaderGUI
         DoNormals();
         DoOcclusion();
         DoEmission();
+        DoDetailMask();
         editor.TextureScaleOffsetProperty(mainTex);
     }
 
@@ -188,6 +189,20 @@ public class LightingShaderGUI : ShaderGUI
         if (EditorGUI.EndChangeCheck()) 
         {
             SetKeyword("_EMISSION_MAP", map.textureValue);
+        }
+    }
+
+    void DoDetailMask()
+    {
+        var mask = FindProperty("_DetailMask");
+        EditorGUI.BeginChangeCheck();
+        editor.TexturePropertySingleLine(
+            MakeLabel(mask, "Detail Mask (A)"),
+            mask
+        );
+        if (EditorGUI.EndChangeCheck())
+        {
+            SetKeyword("_DETAIL_MASK", mask.textureValue);
         }
     }
 }

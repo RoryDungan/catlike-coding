@@ -8,7 +8,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: Circuitry dented
   m_Shader: {fileID: 4800000, guid: 0139ff1df64484d7a9de6c52e5e90dad, type: 3}
-  m_ShaderKeywords: _EMISSION_MAP _METALLIC_MAP _OCCLUSION_MAP _SMOOTHNESS_METALLIC
+  m_ShaderKeywords: _DETAIL_MASK _EMISSION_MAP _METALLIC_MAP _OCCLUSION_MAP _SMOOTHNESS_METALLIC
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -27,16 +27,16 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailMask:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: ebec3039244dbdb41a1e9fe378f91cfc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailNormalMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 22b6580a28d4fdf4d8ce748131f3aeba, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Texture: {fileID: 2800000, guid: 6e45e1b0842d05b4bb5e2ff80ee3630d, type: 3}
+        m_Scale: {x: 3, y: 3}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 2800000, guid: 7010f67f7bf7a454593405a6c88860d8, type: 3}

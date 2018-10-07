@@ -14,11 +14,26 @@ public class LightingShaderGUI : ShaderGUI
 
     static GUIContent staticLabel = new GUIContent();
 
-    static GUIContent MakeLabel(MaterialProperty property, string tooltip = null)
+    static GUIContent MakeLabel(string text, string tooltip = null)
     {
-        staticLabel.text = property.displayName;
+        staticLabel.text = text;
         staticLabel.tooltip = tooltip;
         return staticLabel;
+    }
+
+    static GUIContent MakeLabel(MaterialProperty property, string tooltip = null)
+    {
+        return MakeLabel(property.displayName, tooltip);
+    }
+
+    void RecordAction(string label)
+    {
+        editor.RegisterPropertyChangeUndo(label);
+    }
+
+    bool IsKeywordEnabled(string keyword) 
+    {
+        return target.IsKeywordEnabled(keyword);
     }
 
     public override void OnGUI(MaterialEditor editor, MaterialProperty[] properties)
@@ -82,9 +97,31 @@ public class LightingShaderGUI : ShaderGUI
 
     void DoSmoothness()
     {
+        var source = SmoothnessSource.Uniform;
+        if (IsKeywordEnabled("_SMOOTHNESS_ALBEDO"))
+        {
+            source = SmoothnessSource.Albedo;
+        }
+        else if (IsKeywordEnabled("_SMOOTHNESS_METALLIC"))
+        {
+            source = SmoothnessSource.Metallic;
+        }
         var slider = FindProperty("_Smoothness");
         EditorGUI.indentLevel += 2;
         editor.ShaderProperty(slider, MakeLabel(slider));
+        EditorGUI.indentLevel += 1;
+        EditorGUI.BeginChangeCheck();
+        source = (SmoothnessSource)EditorGUILayout.EnumPopup(
+            MakeLabel("Source"), 
+            source
+        );
+        if (EditorGUI.EndChangeCheck()) 
+        {
+            RecordAction("Smoothness Source");
+            SetKeyword("_SMOOTHNESS_ALBEDO", source == SmoothnessSource.Albedo);
+            SetKeyword("_SMOOTHNESS_METALLIC", source == SmoothnessSource.Metallic);
+        }
+        EditorGUI.indentLevel -= 1;
         EditorGUI.indentLevel -= 2;
     }
 

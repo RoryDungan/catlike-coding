@@ -14,9 +14,6 @@ public class LightingShaderGUI : ShaderGUI
 
     static GUIContent staticLabel = new GUIContent();
 
-    static ColorPickerHDRConfig emissionConfig = 
-        new ColorPickerHDRConfig(0f, 99f, 1f / 99f, 3f);
-
     static GUIContent MakeLabel(string text, string tooltip = null)
     {
         staticLabel.text = text;
@@ -170,7 +167,6 @@ public class LightingShaderGUI : ShaderGUI
             MakeLabel(map, "Emission (RGB)"), 
             map, 
             FindProperty("_Emission"),
-            emissionConfig,
             false
         );
         if (EditorGUI.EndChangeCheck()) 

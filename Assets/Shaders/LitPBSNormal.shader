@@ -40,9 +40,12 @@ Shader "Custom/Lit (PBS, normal map)"
             #pragma multi_compile _ VERTEXLIGHT_ON
             #pragma shader_feature _ _METALLIC_MAP
             #pragma shader_feature _ _SMOOTHNESS_ALBEDO _SMOOTHNESS_METALLIC
+            #pragma shader_feature _ _NORMAL_MAP
             #pragma shader_feature _ _OCCLUSION_MAP
             #pragma shader_feature _ _EMISSION_MAP
             #pragma shader_feature _ _DETAIL_MASK
+            #pragma shader_feature _ _DETAIL_ALBEDO_MAP
+            #pragma shader_feature _ _DETAIL_NORMAL_MAP
 
             #pragma vertex vert
             #pragma fragment frag
@@ -68,9 +71,12 @@ Shader "Custom/Lit (PBS, normal map)"
             #pragma multi_compile_fwdadd_fullshadows
             #pragma shader_feature _ _METALLIC_MAP
             #pragma shader_feature _ _SMOOTHNESS_ALBEDO _SMOOTHNESS_METALLIC
+            #pragma shader_feature _ _NORMAL_MAP
             #pragma shader_feature _ _OCCLUSION_MAP
             #pragma shader_feature _ _EMISSION_MAP
             #pragma shader_feature _ _DETAIL_MASK
+            #pragma shader_feature _ _DETAIL_ALBEDO_MAP
+            #pragma shader_feature _ _DETAIL_NORMAL_MAP
 
             #pragma vertex vert
             #pragma fragment frag

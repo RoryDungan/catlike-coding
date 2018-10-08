@@ -8,7 +8,8 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: Circuitry dented
   m_Shader: {fileID: 4800000, guid: 0139ff1df64484d7a9de6c52e5e90dad, type: 3}
-  m_ShaderKeywords: _DETAIL_MASK _EMISSION_MAP _METALLIC_MAP _OCCLUSION_MAP _SMOOTHNESS_METALLIC
+  m_ShaderKeywords: _DETAIL_ALBEDO_MAP _DETAIL_MASK _DETAIL_NORMAL_MAP _EMISSION_MAP
+    _METALLIC_MAP _NORMAL_MAP _OCCLUSION_MAP _SMOOTHNESS_METALLIC
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0

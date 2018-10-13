@@ -21,6 +21,8 @@ float _OcclusionStrength;
 sampler2D _EmissionMap;
 float3 _Emission;
 
+float _AlphaCutoff;
+
 struct VertexData
 {
     float4 vertex : POSITION;
@@ -251,6 +253,14 @@ float3 GetTangentSpaceNormal (Interpolators i) {
     return normal;
 }
 
+float GetAlpha(Interpolators i) {
+    float alpha = _Tint.a;
+    #if !defined(_SMOOTHNESS_ALBEDO)
+        alpha *= tex2D(_MainTex, i.uv.xy).a;
+    #endif
+    return alpha;
+}
+
 void InitializeFragmentNormal(inout Interpolators i) {
     float3 tangentSpaceNormal = GetTangentSpaceNormal(i);
 
@@ -269,6 +279,11 @@ void InitializeFragmentNormal(inout Interpolators i) {
 
 fixed4 frag (Interpolators i) : SV_TARGET
 {
+    float alpha = GetAlpha(i);
+    #if defined(_RENDERING_CUTOUT)
+        clip(alpha - _AlphaCutoff);
+    #endif
+
     InitializeFragmentNormal(i);
 
     float3 viewDir = normalize(_WorldSpaceCameraPos - i.worldPos);

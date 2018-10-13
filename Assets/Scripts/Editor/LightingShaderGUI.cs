@@ -8,9 +8,16 @@ public class LightingShaderGUI : ShaderGUI
         Uniform, Albedo, Metallic
     }
 
+    enum RenderingMode
+    {
+        Opaque, Cutout
+    }
+
     Material target;
     MaterialEditor editor;
     MaterialProperty[] properties;
+
+    bool shouldShowAlphaCutoff;
 
     static GUIContent staticLabel = new GUIContent();
 
@@ -41,7 +48,7 @@ public class LightingShaderGUI : ShaderGUI
         target = (Material)editor.target;
         this.editor = editor;
         this.properties = properties;
-
+        DoRenderingMode();
         DoMain();
         DoSecondary();
     }
@@ -80,6 +87,10 @@ public class LightingShaderGUI : ShaderGUI
             mainTex, 
             tint
         );
+        if (shouldShowAlphaCutoff)
+        {
+            DoAlphaCutoff();
+        }
         DoMetallic();
         DoSmoothness();
         DoNormals();
@@ -87,6 +98,36 @@ public class LightingShaderGUI : ShaderGUI
         DoEmission();
         DoDetailMask();
         editor.TextureScaleOffsetProperty(mainTex);
+    }
+
+    void DoRenderingMode() 
+    {
+        var mode = RenderingMode.Opaque;
+        shouldShowAlphaCutoff = false;
+        if (IsKeywordEnabled("_RENDERING_CUTOUT"))
+        {
+            mode = RenderingMode.Cutout;
+            shouldShowAlphaCutoff = true;
+        }
+
+        EditorGUI.BeginChangeCheck();
+        mode = (RenderingMode)EditorGUILayout.EnumPopup(
+            MakeLabel("Rendering Mode"), 
+            mode
+        );
+        if (EditorGUI.EndChangeCheck())
+        {
+            RecordAction("Rendering Mode");
+            SetKeyword("_RENDERING_CUTOUT", mode == RenderingMode.Cutout);
+        }
+    }
+
+    void DoAlphaCutoff() 
+    {
+        var slider = FindProperty("_AlphaCutoff");
+        EditorGUI.indentLevel += 2;
+        editor.ShaderProperty(slider, MakeLabel(slider));
+        EditorGUI.indentLevel -= 2;
     }
 
     void DoMetallic()

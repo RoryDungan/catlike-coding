@@ -24,6 +24,8 @@ Shader "Custom/Lit (PBS, normal map)"
         [NoScaleOffset] _DetailNormalMap ("Detail Normals", 2D) = "bump" {}
         _DetailBumpScale ("Detail Bump Scale", Float) = 1
         [NoScaleOffset] _DetailMask("Detail Mask", 2D) = "white" {}
+
+        _AlphaCutoff ("Alpha Cutoff", Range(0, 1)) = 0.5
     }
     SubShader
     {
@@ -38,6 +40,7 @@ Shader "Custom/Lit (PBS, normal map)"
 
             #pragma multi_compile _ SHADOWS_SCREEN
             #pragma multi_compile _ VERTEXLIGHT_ON
+            #pragma shader_feature _ _RENDERING_CUTOUT
             #pragma shader_feature _ _METALLIC_MAP
             #pragma shader_feature _ _SMOOTHNESS_ALBEDO _SMOOTHNESS_METALLIC
             #pragma shader_feature _ _NORMAL_MAP
@@ -69,6 +72,7 @@ Shader "Custom/Lit (PBS, normal map)"
             #pragma target 3.0
 
             #pragma multi_compile_fwdadd_fullshadows
+            #pragma shader_feature _ _RENDERING_CUTOUT
             #pragma shader_feature _ _METALLIC_MAP
             #pragma shader_feature _ _SMOOTHNESS_ALBEDO _SMOOTHNESS_METALLIC
             #pragma shader_feature _ _NORMAL_MAP

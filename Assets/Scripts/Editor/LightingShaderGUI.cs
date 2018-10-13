@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class LightingShaderGUI : ShaderGUI
 {
@@ -119,6 +120,14 @@ public class LightingShaderGUI : ShaderGUI
         {
             RecordAction("Rendering Mode");
             SetKeyword("_RENDERING_CUTOUT", mode == RenderingMode.Cutout);
+
+            var queue = mode == RenderingMode.Opaque
+                ? RenderQueue.Geometry
+                : RenderQueue.AlphaTest;
+            foreach (Material m in editor.targets) 
+            {
+                m.renderQueue = (int)queue;
+            }
         }
     }
 

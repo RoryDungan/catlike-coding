@@ -124,9 +124,13 @@ public class LightingShaderGUI : ShaderGUI
             var queue = mode == RenderingMode.Opaque
                 ? RenderQueue.Geometry
                 : RenderQueue.AlphaTest;
+            var renderType = mode == RenderingMode.Opaque
+                ? string.Empty
+                : "TransparentCutout";
             foreach (Material m in editor.targets) 
             {
                 m.renderQueue = (int)queue;
+                m.SetOverrideTag("RenderType", renderType);
             }
         }
     }

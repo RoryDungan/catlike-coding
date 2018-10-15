@@ -11,7 +11,32 @@ public class LightingShaderGUI : ShaderGUI
 
     enum RenderingMode
     {
-        Opaque, Cutout
+        Opaque, Cutout, Fade
+    }
+
+    struct RenderingSettings
+    {
+        public RenderQueue queue;
+        public string renderType;
+
+        public static RenderingSettings[] modes =
+        {
+            new RenderingSettings
+            {
+                queue = RenderQueue.Geometry,
+                renderType = string.Empty
+            },
+            new RenderingSettings
+            {
+                queue = RenderQueue.AlphaTest,
+                renderType = "TransparentCutout"
+            },
+            new RenderingSettings
+            {
+                queue = RenderQueue.Transparent,
+                renderType = "Transparent"
+            }
+        };
     }
 
     Material target;
@@ -110,6 +135,10 @@ public class LightingShaderGUI : ShaderGUI
             mode = RenderingMode.Cutout;
             shouldShowAlphaCutoff = true;
         }
+        else if (IsKeywordEnabled("_RENDERING_FADE"))
+        {
+            mode = RenderingMode.Fade;
+        }
 
         EditorGUI.BeginChangeCheck();
         mode = (RenderingMode)EditorGUILayout.EnumPopup(
@@ -120,17 +149,13 @@ public class LightingShaderGUI : ShaderGUI
         {
             RecordAction("Rendering Mode");
             SetKeyword("_RENDERING_CUTOUT", mode == RenderingMode.Cutout);
+            SetKeyword("_RENDERING_FADE", mode == RenderingMode.Fade);
 
-            var queue = mode == RenderingMode.Opaque
-                ? RenderQueue.Geometry
-                : RenderQueue.AlphaTest;
-            var renderType = mode == RenderingMode.Opaque
-                ? string.Empty
-                : "TransparentCutout";
+            var settings = RenderingSettings.modes[(int) mode];
             foreach (Material m in editor.targets) 
             {
-                m.renderQueue = (int)queue;
-                m.SetOverrideTag("RenderType", renderType);
+                m.renderQueue = (int)settings.queue;
+                m.SetOverrideTag("RenderType", settings.renderType);
             }
         }
     }
